@@ -1,7 +1,3 @@
-/* by Huy Hamada
- *  21 june 2019
- *  prosthetic . beta . Transmitter
- */
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -15,8 +11,6 @@
 #define OLED_CS    0
 #define OLED_RESET 3
 
-byte valtrans[3];
-
 int mode = 0;
 int valbtn2 = 0;
 int valbtn3 = 0;
@@ -28,37 +22,74 @@ int btn1;
 int btn2;
 int btn3;
 
+int a1;
+int a2;
+int a3;
+int a4;
+int a5;
+int a6;
+int a7;
+int a8;
+int a9;
+int a10;
+
 int musval;
 int musvaldisplay;
 int dpi = 0;
 int vallimit = 0;
 int detect_01;
+byte va[3];
 
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
-void setup()   {
-
+void setup()
+{
   Serial.begin(9600);
+  pinMode(30,OUTPUT);
+  pinMode(31,OUTPUT);
+  pinMode(32,OUTPUT);
+  pinMode(33,OUTPUT);
+  pinMode(34,OUTPUT);
+  pinMode(35,OUTPUT);
+  pinMode(36,OUTPUT);
+  pinMode(37,OUTPUT);
+  pinMode(38,OUTPUT);
+  pinMode(39,OUTPUT);
+
+  pinMode(41,INPUT);
+  pinMode(40,INPUT);
+  pinMode(42,INPUT);
+  pinMode(43,INPUT);
+  pinMode(44,INPUT);
+  pinMode(45,INPUT);
+  pinMode(46,INPUT);
+  pinMode(47,INPUT);
+  pinMode(48,INPUT);
+  pinMode(49,INPUT);
+  
   display.begin(SSD1306_SWITCHCAPVCC);
   display.clearDisplay();
   begining();
   display.display();
-  delay(500);
+  delay(100);
+  
 }
-
 void loop()
 {
-  
-  // controlpanel();
-  int musval = analogRead(A0);
-  int btn1 = digitalRead(8);
-  int btn2 = digitalRead(9);
-  int btn3 = digitalRead(10);
-//  Serial.print(btn1);
-//  Serial.print(btn2);
-//  Serial.print(btn3);
-//  Serial.print(" ");
-   Serial.println(musval);
+  btn1 = digitalRead(8);
+  btn2 = digitalRead(9);
+  btn3 = digitalRead(10);
+
+  a1 = digitalRead(40);
+  a2 = digitalRead(41);
+  a3 = digitalRead(42);
+  a4 = digitalRead(43);
+  a5 = digitalRead(44);
+  a6 = digitalRead(45);
+  a7 = digitalRead(46);
+  a8 = digitalRead(47);
+  a9 = digitalRead(48);
+  a10 = digitalRead(49);
 
   if(btn1 == 1 and st1 ==0) {mode++;  st1 = 1;}
   if(btn1 == 1 and st1 ==1) {mode = mode; st1 = 1;}
@@ -72,11 +103,32 @@ void loop()
 
   
 
-  
-  
- Serial.println(mode);
-//  display.display();
-  delay(50);
+  Serial.println(mode);
+//  
+//  Serial.print(btn1);
+//  Serial.print(btn2);
+//  Serial.print(btn3);
+//  Serial.print(" ");
+//  Serial.print(a1);
+//  Serial.print(" ");
+//  Serial.print(a2);
+//  Serial.print(" ");
+//  Serial.print(a3);
+//  Serial.print(" ");
+//  Serial.print(a4);
+//  Serial.print(" ");
+//  Serial.print(a5);
+//  Serial.print(" ");
+//  Serial.print(a6);
+//  Serial.print(" ");
+//  Serial.print(a7);
+//  Serial.print(" ");
+//  Serial.print(a8);
+//  Serial.print(" ");
+//  Serial.print(a9);
+//  Serial.print(" ");
+//  Serial.println(a10);
+
 }
 void begining()
 {
@@ -86,7 +138,6 @@ void begining()
   display.display();
   for(int i = 0;i<=128;i++) { display.fillRect(0,0,i,8,WHITE);  display.display(); }
 }
-
 void slicebar()
 {
   musval = analogRead(A0);
@@ -119,7 +170,6 @@ void linechart()
 }
 void controlpanel()
 {
-  
   musval = analogRead(A0);
   if(btn2 == 1 and st2 ==0) {dpi = dpi + 5;  st2 = 1;}
   if(btn2 == 1 and st2 ==1) {dpi = dpi; st2 = 1;}
@@ -131,7 +181,6 @@ void controlpanel()
 
   if(btn2 == 1 and btn3 ==1) {vallimit = 0; dpi = 0;}
 
-  
   musvaldisplay = map(musval, 1023, 0, 700, 0);
   display.clearDisplay();
   display.setCursor(0,0);
@@ -156,10 +205,10 @@ void controlpanel()
 
   if(musval >= vallimit)
   {
-    if (vallimit == 0)  {valtrans[0] = 0; }
-    else { valtrans[0] = 1;  display.fillRect(100,0,11,8,WHITE);}
+    if (vallimit == 0)  {va[0] = 0; }
+    else { va[0] = 1;  display.fillRect(100,0,11,8,WHITE);}
   }
-  else { valtrans[0] = 0; }
+  else { va[0] = 0; }
   display.display();
 }
 void test()
@@ -167,10 +216,19 @@ void test()
   display.clearDisplay();
   definetext(0,0,1,WHITE);
   display.print("Signal Testing >>");
-  int btn2 = digitalRead(A2);
+  int btn2 = digitalRead(9);
   definetext(0,9,1,WHITE);
   display.print(btn2);
-  valtrans[1] = btn2; 
+  va[1] = btn2; 
+
+  if(va[1]==0 and a7==0){moving(30,1,31,0);}
+  if(va[1]==0 and a7==1){moving(30,0,31,0);}
+  if(va[1]==1 and a8==0){moving(31,1,20,0);}
+  if(va[1]==1 and a8==1){moving(31,0,20,0);}
+
+
+
+  
   display.display();
 }
 void definetext(int cur1, int cur2, int textsize, char textcolor)
@@ -179,9 +237,7 @@ void definetext(int cur1, int cur2, int textsize, char textcolor)
   display.setTextSize(textsize);
   display.setTextColor(textcolor);
 }
-void detectsensor()
+void moving(int pin1, int st1, int pin2, int st2)
 {
-  detect_01 = digitalRead(A0);
-  if(detect_01 == 0 & st4 == 0) display.print("");
-  
+  digitalWrite(pin1,st1); digitalWrite(pin2,st2);
 }

@@ -23,6 +23,8 @@ void setup(){
   pinMode(9,OUTPUT);
   pinMode(10,OUTPUT);
   pinMode(11,OUTPUT);
+  pinMode(30,OUTPUT);
+  pinMode(31,OUTPUT);
 }
 
 void loop(){
@@ -34,12 +36,15 @@ void loop(){
   int check6 = digitalRead(A5);
   int check7 = digitalRead(A6);
   int check8 = digitalRead(A7);
+  int check9 = digitalRead(A8);
+  int check10 = digitalRead(A9);
   if (radio.available()){
     while (radio.available()){
       radio.read(&va, sizeof(va));
 
     }
   }
+//  va[1] = 1;
   Serial.print(check1);
   Serial.print(check2);
   Serial.print(check3);
@@ -64,6 +69,11 @@ void loop(){
   if(va[1]==0 and check8==1){moving(10,0,11,0);}
   if(va[1]==1 and check7==0){moving(11,1,10,0);}
   if(va[1]==1 and check7==1){moving(11,0,10,0);}
+
+  if(va[1]==0 and check9==0){moving(31,1,30,0);}
+  if(va[1]==0 and check9==1){moving(31,0,30,0);}
+  if(va[1]==1 and check10==0){moving(30,1,31,0);}
+  if(va[1]==1 and check10==1){moving(30,0,31,0);}
 }
 void moving(int pin1, int st1, int pin2, int st2)
 {
